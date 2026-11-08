@@ -132,7 +132,12 @@ def buy_proc(c):
         return
     bot.edit_message_text("⏳ নাম্বার নেওয়া হচ্ছে...", c.message.chat.id, c.message.message_id)
     try:
-        res = session.post(f"{BASE_URL}/getnum", headers=HEADERS, json={"rid": str(srv["rid"])}, verify=False).json()
+        raw_res = session.post(f"{BASE_URL}/getnum", headers=HEADERS, json={"rid": str(srv["rid"])}, verify=False)
+        try:
+            res = raw_res.json()
+        except Exception:
+            bot.edit_message_text(f"❌ সার্ভার রেসপন্স ({raw_res.status_code}): `{raw_res.text[:200]}`", c.message.chat.id, c.message.message_id, parse_mode="Markdown")
+            return
         if res.get("meta", {}).get("code") == 200 and res.get("data"):
             d = res["data"]
             add_bal(uid, -srv["price"])
