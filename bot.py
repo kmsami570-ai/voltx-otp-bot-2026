@@ -27,7 +27,7 @@ BASE_URL = "https://2oo9.cloud"
 
 bot = telebot.TeleBot(BOT_TOKEN, threaded=True, num_threads=15)
 session = requests.Session()
-HEADERS = {"mauthapi": VOLTX_API_KEY, "Content-Type": "application/json"}
+HEADERS = {"mauthapi": VOLTX_API_KEY, "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36"}
 
 DATA_FILE = "bot_db.json"
 db = {"users": {}, "services": [], "reward": 0.02}
