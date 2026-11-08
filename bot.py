@@ -1,3 +1,5 @@
+import urllib3
+urllib3.disable_warnings()
 import telebot
 from telebot import types
 import requests
@@ -130,7 +132,7 @@ def buy_proc(c):
         return
     bot.edit_message_text("⏳ নাম্বার নেওয়া হচ্ছে...", c.message.chat.id, c.message.message_id)
     try:
-        res = session.post(f"{BASE_URL}/getnum", headers=HEADERS, json={"rid": str(srv["rid"])}).json()
+        res = session.post(f"{BASE_URL}/getnum", headers=HEADERS, json={"rid": str(srv["rid"])}, verify=False).json()
         if res.get("meta", {}).get("code") == 200 and res.get("data"):
             d = res["data"]
             add_bal(uid, -srv["price"])
@@ -147,7 +149,7 @@ def otp_proc(c):
     num = c.data.split("_")[1]
     uid = c.from_user.id
     try:
-        res = session.get(f"{BASE_URL}/success-otp", headers=HEADERS).json()
+        res = session.get(f"{BASE_URL}/success-otp", headers=HEADERS, verify=False).json()
         for item in res.get("data", {}).get("otps", []):
             if str(item.get("number")) == str(num):
                 rew = db.get("reward", 0.02)
