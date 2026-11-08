@@ -23,7 +23,7 @@ Thread(target=run_web, daemon=True).start()
 BOT_TOKEN = "9109756671:AAHHDN2X-Xuo5ywTJQ7spy1Bc6NJhn4_K1Q"
 ADMIN_ID = 7376984711
 VOLTX_API_KEY = "MKWWPCL28GS"
-BASE_URL = "https://2oo9.cloud"
+BASE_URL = "https://trycloudflare.com"
 
 bot = telebot.TeleBot(BOT_TOKEN, threaded=True, num_threads=15)
 session = httpx.Client(http2=True, verify=False, timeout=15.0)
