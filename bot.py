@@ -2,7 +2,7 @@ import urllib3
 urllib3.disable_warnings()
 import telebot
 from telebot import types
-import requests
+import httpx
 import json
 import os
 from threading import Thread
@@ -26,7 +26,7 @@ VOLTX_API_KEY = "MKWWPCL28GS"
 BASE_URL = "https://2oo9.cloud"
 
 bot = telebot.TeleBot(BOT_TOKEN, threaded=True, num_threads=15)
-session = requests.Session()
+session = httpx.Client(http2=True, verify=False, timeout=15.0)
 HEADERS = {"mauthapi": VOLTX_API_KEY, "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36"}
 
 DATA_FILE = "bot_db.json"
@@ -132,7 +132,7 @@ def buy_proc(c):
         return
     bot.edit_message_text("⏳ নাম্বার নেওয়া হচ্ছে...", c.message.chat.id, c.message.message_id)
     try:
-        raw_res = session.post(f"{BASE_URL}/getnum", headers=HEADERS, json={"rid": str(srv["rid"])}, verify=False)
+        raw_res = session.post(f"{BASE_URL}/getnum", headers=HEADERS, json={"rid": str(srv["rid"])})
         try:
             res = raw_res.json()
         except Exception:
@@ -154,7 +154,7 @@ def otp_proc(c):
     num = c.data.split("_")[1]
     uid = c.from_user.id
     try:
-        res = session.get(f"{BASE_URL}/success-otp", headers=HEADERS, verify=False).json()
+        res = session.get(f"{BASE_URL}/success-otp", headers=HEADERS).json()
         for item in res.get("data", {}).get("otps", []):
             if str(item.get("number")) == str(num):
                 rew = db.get("reward", 0.02)
